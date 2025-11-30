@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ProjectCategory, Project } from '../types';
-import { Play, Eye, ExternalLink, X, Download } from 'lucide-react';
+import { Play, Eye, ExternalLink, X } from 'lucide-react';
 import { videoProjects } from '../data/videos';
 import { designProjects } from '../data/designs';
 
@@ -110,12 +110,11 @@ export default function Portfolio() {
               onClick: (e: React.MouseEvent) => handleProjectClick(e, project)
             } : {};
 
-            // Use taller aspect ratio for graphics to prevent cropping of flyers/posters
-            const aspectRatioClass = project.category === 'video' ? 'aspect-video' : 'aspect-[4/5]';
+            // Use taller aspect ratio (2:3) for graphics to better fit posters/flyers
+            const aspectRatioClass = project.category === 'video' ? 'aspect-video' : 'aspect-[1/1]';
+            // Align graphics to top to prevent cutting off headers/logos
+            const objectPosClass = project.category === 'graphic' ? 'object-top' : 'object-center';
             
-            // Check if link is a download (rar/zip)
-            const isDownload = project.link?.endsWith('.rar') || project.link?.endsWith('.zip');
-
             return (
               <Component
                 key={project.id}
@@ -126,7 +125,7 @@ export default function Portfolio() {
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className={`w-full h-full object-cover ${objectPosClass} transition-transform duration-700 group-hover:scale-110`}
                     onError={(e) => handleImageError(e, project.title)}
                   />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
@@ -147,11 +146,7 @@ export default function Portfolio() {
                     <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">
                       {project.category}
                     </span>
-                    {project.link && (
-                      isDownload 
-                        ? <Download size={16} className="text-gray-500 hover:text-white" />
-                        : <ExternalLink size={16} className="text-gray-500 hover:text-white" />
-                    )}
+                    {project.link && <ExternalLink size={16} className="text-gray-500 hover:text-white" />}
                   </div>
                   <h3 className="text-xl font-bold mb-2 group-hover:text-purple-300 transition-colors">
                     {project.title}

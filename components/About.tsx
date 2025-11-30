@@ -47,12 +47,8 @@ export default function About() {
                   <p className="text-sm text-gray-500 uppercase tracking-wide mt-1">Projects Completed</p>
                 </div>
                 <div>
-                  <h4 className="text-3xl font-bold text-cyan-400">5+</h4>
+                  <h4 className="text-3xl font-bold text-cyan-400">2+</h4>
                   <p className="text-sm text-gray-500 uppercase tracking-wide mt-1">Years Experience</p>
-                </div>
-                <div>
-                  <h4 className="text-3xl font-bold text-pink-400">12</h4>
-                  <p className="text-sm text-gray-500 uppercase tracking-wide mt-1">Awards Won</p>
                 </div>
               </div>
             </div>

@@ -1,0 +1,85 @@
+.logoloop {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  width: 100%;
+  --logoloop-gap: 32px;
+  --logoloop-logoHeight: 28px;
+}
+
+.logoloop__track {
+  display: flex;
+  will-change: transform;
+  /* Ensure the track is wide enough to hold children */
+}
+
+.logoloop__list {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--logoloop-gap);
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* Add padding to the end to maintain gap between duplicate lists */
+  padding-right: var(--logoloop-gap);
+}
+
+.logoloop__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logoloop__item img {
+  height: var(--logoloop-logoHeight);
+  width: auto;
+  max-width: none;
+  display: block;
+  object-fit: contain;
+  /* Filter to white in case the source isn't, though we use white CDN links */
+  filter: brightness(0) invert(1);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.logoloop__item img:hover {
+  opacity: 1;
+}
+
+/* Vertical Logic if needed later */
+.logoloop--vertical {
+  flex-direction: column;
+  height: 100%;
+}
+
+.logoloop--vertical .logoloop__track {
+  flex-direction: column;
+}
+
+.logoloop--vertical .logoloop__list {
+  flex-direction: column;
+  padding-right: 0;
+  padding-bottom: var(--logoloop-gap);
+}
+
+/* Fade Effects */
+.logoloop--fade {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.logoloop--vertical.logoloop--fade {
+  mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+}
+
+.logoloop--scale-hover .logoloop__item {
+  transition: transform 0.3s ease;
+}
+
+.logoloop--scale-hover .logoloop__item:hover {
+  transform: scale(1.1);
+}

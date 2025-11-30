@@ -111,7 +111,7 @@ export default function Portfolio() {
             } : {};
 
             // Use taller aspect ratio for graphics to prevent cropping of flyers/posters
-            const aspectRatioClass = project.category === 'video' ? 'aspect-video' : 'aspect-[4/5]';
+            const aspectRatioClass = project.category === 'video' ? 'aspect-video' : 'aspect-[1/1]';
             
             // Check if link is a download (rar/zip)
             const isDownload = project.link?.endsWith('.rar') || project.link?.endsWith('.zip');

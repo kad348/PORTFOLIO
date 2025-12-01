@@ -14,6 +14,23 @@ const softwareLogos = [
 ];
 
 export default function Hero() {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
       <div className="container mx-auto max-w-7xl relative z-10">
@@ -42,7 +59,8 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="#portfolio"
-                className="group relative px-8 py-4 bg-white text-black font-bold rounded-full overflow-hidden flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors"
+                onClick={(e) => scrollToSection(e, '#portfolio')}
+                className="group relative px-8 py-4 bg-white text-black font-bold rounded-full overflow-hidden flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors cursor-pointer"
               >
                 <span>View Recent Work</span>
                 <ArrowDown size={18} className="group-hover:translate-y-1 transition-transform" />
@@ -50,7 +68,8 @@ export default function Hero() {
               
               <a
                 href="#contact"
-                className="px-8 py-4 rounded-full border border-white/20 hover:bg-white/10 backdrop-blur-sm text-white transition-all flex items-center justify-center gap-2"
+                onClick={(e) => scrollToSection(e, '#contact')}
+                className="px-8 py-4 rounded-full border border-white/20 hover:bg-white/10 backdrop-blur-sm text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <Play size={16} className="fill-current" />
                 <span>Showreel</span>

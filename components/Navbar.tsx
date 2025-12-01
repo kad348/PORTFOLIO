@@ -20,6 +20,25 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setIsOpen(false);
+    
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80; // Height of the fixed navbar
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -27,7 +46,7 @@ export default function Navbar() {
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#" className="text-xl md:text-2xl font-bold tracking-tighter text-white font-display uppercase">
+        <a href="#" onClick={(e) => scrollToSection(e, '#')} className="text-xl md:text-2xl font-bold tracking-tighter text-white font-display uppercase">
           Kaveen <span className="text-purple-400">Adithya</span>
         </a>
 
@@ -37,7 +56,8 @@ export default function Navbar() {
             <a
               key={item.label}
               href={item.href}
-              className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-widest hover:underline decoration-purple-500 underline-offset-4"
+              onClick={(e) => scrollToSection(e, item.href)}
+              className="text-sm font-medium text-gray-300 hover:text-white transition-colors uppercase tracking-widest hover:underline decoration-purple-500 underline-offset-4 cursor-pointer"
             >
               {item.label}
             </a>
@@ -55,13 +75,13 @@ export default function Navbar() {
 
       {/* Mobile Nav */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-lg border-b border-white/10 p-6 flex flex-col space-y-4">
+        <div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-lg border-b border-white/10 p-6 flex flex-col space-y-4 h-screen">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
+              onClick={(e) => scrollToSection(e, item.href)}
               className="text-lg font-medium text-gray-200 hover:text-purple-400 transition-colors"
-              onClick={() => setIsOpen(false)}
             >
               {item.label}
             </a>

@@ -2,15 +2,28 @@ import React from 'react';
 import { ArrowDown, Play } from 'lucide-react';
 import LogoLoop from './LogoLoop';
 
-// Using SimpleIcons for consistent, high-quality white logos
+// Using official colored app icons to match the provided files
 const softwareLogos = [
-  { title: 'Adobe Premiere Pro', src: 'https://cdn.simpleicons.org/adobepremierepro/white' },
-  { title: 'Adobe After Effects', src: 'https://cdn.simpleicons.org/adobeaftereffects/white' },
-  { title: 'Adobe Photoshop', src: 'https://cdn.simpleicons.org/adobephotoshop/white' },
-  { title: 'Adobe Illustrator', src: 'https://cdn.simpleicons.org/adobeillustrator/white' },
-  { title: 'DaVinci Resolve', src: 'https://cdn.simpleicons.org/blackmagicdesign/white' }, // DaVinci is by Blackmagic
-  { title: 'Affinity Designer', src: 'https://cdn.simpleicons.org/affinitydesigner/white' },
-  { title: 'Affinity Photo', src: 'https://cdn.simpleicons.org/affinityphoto/white' },
+  { 
+    title: 'Adobe Premiere Pro', 
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Adobe_Premiere_Pro_CC_icon.svg/2101px-Adobe_Premiere_Pro_CC_icon.svg.png' 
+  },
+  { 
+    title: 'Adobe After Effects', 
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Adobe_After_Effects_CC_icon.svg/2101px-Adobe_After_Effects_CC_icon.svg.png' 
+  },
+  { 
+    title: 'Adobe Photoshop', 
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Adobe_Photoshop_CC_icon.svg/2101px-Adobe_Photoshop_CC_icon.svg.png' 
+  },
+  { 
+    title: 'Adobe Illustrator', 
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Adobe_Illustrator_CC_icon.svg/2101px-Adobe_Illustrator_CC_icon.svg.png' 
+  },
+  { 
+    title: 'DaVinci Resolve', 
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/DaVinci_Resolve_Studio.png/600px-DaVinci_Resolve_Studio.png' 
+  }
 ];
 
 export default function Hero() {
@@ -95,7 +108,7 @@ export default function Hero() {
                   speed={40} 
                   direction="left" 
                   gap={40} 
-                  logoHeight={40}
+                  logoHeight={48} // Slightly larger for app icons
                   pauseOnHover={true}
                   scaleOnHover={true}
                   fadeOut={true}

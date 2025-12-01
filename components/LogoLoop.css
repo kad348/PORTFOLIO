@@ -39,9 +39,8 @@
   max-width: none;
   display: block;
   object-fit: contain;
-  /* Filter to white in case the source isn't, though we use white CDN links */
-  filter: brightness(0) invert(1);
-  opacity: 0.7;
+  /* Removed filter to show original brand colors */
+  opacity: 0.9;
   transition: opacity 0.3s ease;
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Instagram, Twitter, Linkedin } from 'lucide-react';
+import { Mail, Instagram, MessageCircle, Linkedin } from 'lucide-react';
 
 export default function Contact() {
   return (
@@ -15,7 +15,7 @@ export default function Contact() {
              <div className="p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
                <Mail className="w-8 h-8 text-purple-400 mb-4" />
                <h3 className="text-lg font-bold mb-1">Email Me</h3>
-               <a href="mailto:hello@kaveenadithya.com" className="text-gray-400 hover:text-white transition-colors">hello@kaveenadithya.com</a>
+               <a href="mailto:hello@kaveenadithya.com" className="text-gray-400 hover:text-white transition-colors">akaveen403@gmail.com</a>
              </div>
              
              <div className="p-6 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl">
@@ -23,8 +23,9 @@ export default function Contact() {
                  <a href="#" className="p-2 bg-white/5 rounded-lg hover:bg-white/10 hover:text-purple-400 transition-colors">
                    <Instagram size={24} />
                  </a>
-                 <a href="#" className="p-2 bg-white/5 rounded-lg hover:bg-white/10 hover:text-cyan-400 transition-colors">
-                   <Twitter size={24} />
+                 {/* Replaced Twitter with WhatsApp */}
+                 <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/5 rounded-lg hover:bg-white/10 hover:text-green-400 transition-colors" aria-label="WhatsApp">
+                   <MessageCircle size={24} />
                  </a>
                  <a href="#" className="p-2 bg-white/5 rounded-lg hover:bg-white/10 hover:text-blue-400 transition-colors">
                    <Linkedin size={24} />

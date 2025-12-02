@@ -16,7 +16,7 @@ export default function About() {
               <div className="space-y-4 text-gray-300 leading-relaxed">
                 <p>
                   I'm a multidisciplinary creative with a passion for storytelling through motion and design. 
-                  With over 5 years of experience in the industry, I've had the privilege of working with 
+                  With over 2 years of experience in the industry, I've had the privilege of working with 
                   brands ranging from tech startups to established fashion labels.
                 </p>
                 <p>

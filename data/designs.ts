@@ -9,7 +9,6 @@ export const designProjects: Project[] = [
     category: 'graphic',
     image: '/images/sweet-freeze.jpg',
     description: 'Vibrant event poster design for ICBT Campus ice cream stall featuring custom typography.',
-    link: '/images.rar'
   },
   {
     id: 6,
@@ -17,7 +16,6 @@ export const designProjects: Project[] = [
     category: 'graphic',
     image: '/images/sparepoint.jpg',
     description: 'Professional product advertisement for Nissan X-Trail automotive parts.',
-    link: '/images.rar'
   },
   {
     id: 7,
@@ -25,14 +23,12 @@ export const designProjects: Project[] = [
     category: 'graphic',
     image: '/images/hotel-flyer.jpg',
     description: 'Elegant flyer design showcasing hotel features, services, and seasonal offers.',
-    link: '/images.rar'
   },
   {
-    id: 7,
+    id: 8,
     title: 'Lewis Hamilton Poster',
     category: 'graphic',
     image: '/images/f1.png',
     description: 'F1 Poster for Reasons Podcast.',
-    link: '/images.rar'
   },
 ];

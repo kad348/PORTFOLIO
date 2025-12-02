@@ -15,7 +15,7 @@ export const designProjects: Project[] = [
     id: 6,
     title: 'SparePoint Product Ad',
     category: 'graphic',
-    image: '/images/NISSAN_X_2.png',
+    image: '/images/sparepoint.png',
     description: 'Professional product advertisement for Nissan X-Trail automotive parts.',
     link: '/images.rar'
   },

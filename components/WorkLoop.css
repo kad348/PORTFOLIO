@@ -24,6 +24,7 @@
   display: flex;
   gap: 2rem;
   min-width: 100%;
+  will-change: transform; /* Optimized for GPU */
 }
 
 .work-loop-container:hover .work-loop-inner {

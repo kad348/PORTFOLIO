@@ -216,6 +216,7 @@ export default function Galaxy({
   const smoothMousePos = useRef({ x: 0.5, y: 0.5 });
   const targetMouseActive = useRef(0.0);
   const smoothMouseActive = useRef(0.0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!ctnDom.current) return;
@@ -281,10 +282,26 @@ export default function Galaxy({
     });
 
     const mesh = new Mesh(gl, { geometry, program });
-    let animateId: number;
+
+    // Optimization: Pause animation if page is hidden
+    let isVisible = true;
+    const handleVisibilityChange = () => {
+      isVisible = !document.hidden;
+      if (isVisible) {
+        // Restart loop
+        rafRef.current = requestAnimationFrame(update);
+      } else {
+        // Cancel loop
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     function update(t: number) {
-      animateId = requestAnimationFrame(update);
+      if (!isVisible) return;
+      
+      rafRef.current = requestAnimationFrame(update);
+      
       if (!disableAnimation) {
         program.uniforms.uTime.value = t * 0.001;
         program.uniforms.uStarSpeed.value = (t * 0.001 * starSpeed) / 10.0;
@@ -302,7 +319,9 @@ export default function Galaxy({
 
       renderer.render({ scene: mesh });
     }
-    animateId = requestAnimationFrame(update);
+    
+    // Start loop
+    rafRef.current = requestAnimationFrame(update);
     ctn.appendChild(gl.canvas);
 
     function handleMouseMove(e: MouseEvent) {
@@ -324,8 +343,10 @@ export default function Galaxy({
     }
 
     return () => {
-      cancelAnimationFrame(animateId);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', resize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      
       if (mouseInteraction) {
         window.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseleave', handleMouseLeave);

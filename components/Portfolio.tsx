@@ -119,7 +119,7 @@ export default function Portfolio() {
           if (t.includes('sweet') || t.includes('freeze')) fallback = 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&q=80&w=600';
           else if (t.includes('spare') || t.includes('auto')) fallback = 'https://images.unsplash.com/photo-1486262715619-01b8c2297602?auto=format&fit=crop&q=80&w=600';
           else if (t.includes('hotel')) fallback = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80&w=600';
-          else if (t.includes('lewis') || t.includes('f1')) fallback = 'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?auto=format&fit=crop&q=80&w=600';
+          else if (t.includes('lewis') || t.includes('f1') || t.includes('poster')) fallback = 'https://images.unsplash.com/photo-1533107862482-0e6974b06ec4?auto=format&fit=crop&q=80&w=600';
           setImgSrc(fallback);
       } else {
           setImgSrc(`https://placehold.co/600x800/1a1a1a/ffffff?text=${encodeURIComponent(project.title)}`);

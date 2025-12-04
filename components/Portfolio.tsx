@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ProjectCategory, Project } from '../types';
-import { Play, Eye, ExternalLink, X, ImageOff } from 'lucide-react';
+import { Play, Eye, ExternalLink, X, ImageOff, Maximize2 } from 'lucide-react';
 import { videoProjects } from '../data/videos';
 import { designProjects } from '../data/designs';
 import WorkLoop from './WorkLoop';
@@ -11,10 +11,11 @@ const projects: Project[] = [...videoProjects, ...designProjects];
 export default function Portfolio() {
   const [filter, setFilter] = useState<ProjectCategory>('all');
   const [selectedVideo, setSelectedVideo] = useState<{ src: string; type: 'youtube' | 'local'; isShort: boolean } | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   // Lock body scroll when modal is open
   useEffect(() => {
-    if (selectedVideo) {
+    if (selectedVideo || selectedImage) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -22,13 +23,13 @@ export default function Portfolio() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [selectedVideo]);
+  }, [selectedVideo, selectedImage]);
 
   const filteredProjects = projects.filter(
     (p) => filter === 'all' || p.category === filter
   );
 
-  // Split filtered projects by category for the specific layout request
+  // Split filtered projects by category
   const videoRow = filteredProjects.filter(p => p.category === 'video');
   const graphicRow = filteredProjects.filter(p => p.category === 'graphic');
 
@@ -55,6 +56,7 @@ export default function Portfolio() {
   };
 
   const handleProjectClick = (e: React.MouseEvent, project: Project) => {
+    // Handle Video Clicks
     if (project.category === 'video' && project.link) {
       if (project.link.includes('youtube') || project.link.includes('youtu.be')) {
         e.preventDefault();
@@ -68,13 +70,18 @@ export default function Portfolio() {
         const isShort = project.link.toLowerCase().includes('short') || project.link.toLowerCase().includes('vertical');
         setSelectedVideo({ src: project.link, type: 'local', isShort });
       }
+    } 
+    // Handle Graphic Clicks (Open Lightbox)
+    else if (project.category === 'graphic') {
+      e.preventDefault();
+      setSelectedImage(project.image);
     }
   };
 
   // Image component with Smart Quality Fallback
   const ProjectImage = ({ project, aspectRatioClass, objectPosClass }: { project: Project, aspectRatioClass: string, objectPosClass: string }) => {
-    // Try to start with MQ default for youtube as it is safer
     let initialSrc = project.image;
+    // Attempt to load MQ thumb for videos immediately
     if (project.category === 'video' && project.link && (project.link.includes('youtube') || project.link.includes('youtu.be'))) {
          const { id } = getYouTubeInfo(project.link);
          if (id) initialSrc = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
@@ -88,7 +95,6 @@ export default function Portfolio() {
         if (project.category === 'video' && project.link && (project.link.includes('youtube') || project.link.includes('youtu.be'))) {
             const { id } = getYouTubeInfo(project.link);
             if (id) {
-                // First try maxres
                 newSrc = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
             }
         }
@@ -99,7 +105,7 @@ export default function Portfolio() {
     const handleError = () => {
       if (hasError) return;
       
-      // If maxres failed, try hq, then mq
+      // Video Thumbnail Fallbacks
       if (imgSrc.includes('maxresdefault')) {
           setImgSrc(imgSrc.replace('maxresdefault', 'hqdefault'));
           return;
@@ -112,8 +118,8 @@ export default function Portfolio() {
       setHasError(true);
       console.warn(`Failed to load image: ${imgSrc}`);
       
-      if (project.category === 'graphic') {
-          // Unsplash Fallbacks for graphics
+      // Graphic Design Fallbacks (Unsplash)
+      if (project.category === 'graphic' && !project.image.startsWith('http')) {
           const t = project.title.toLowerCase();
           let fallback = `https://placehold.co/600x800/1a1a1a/ffffff?text=${encodeURIComponent(project.title)}`;
           if (t.includes('sweet') || t.includes('freeze')) fallback = 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&q=80&w=600';
@@ -138,20 +144,21 @@ export default function Portfolio() {
   };
 
   const ProjectCard = ({ project }: { project: Project }) => {
-    const isLink = !!project.link;
-    const Component = isLink ? 'a' : 'div';
-    const props = isLink ? {
+    // Treat project as clickable if it has a link OR is a graphic (for lightbox)
+    const isClickable = !!project.link || project.category === 'graphic';
+    const Component = project.link ? 'a' : 'div';
+    
+    const props = project.link ? {
       href: project.link,
       target: "_blank",
       rel: "noopener noreferrer",
       onClick: (e: React.MouseEvent) => handleProjectClick(e, project)
-    } : {};
+    } : {
+      onClick: (e: React.MouseEvent) => handleProjectClick(e, project)
+    };
 
     const isVideo = project.category === 'video';
     
-    // SPECIFIC SIZES REQUESTED
-    // Videos: YouTube Short size (Vertical 9:16). Width 280px is good for mobile/desktop balance.
-    // Graphics: Square (1:1). Width 320px for good visibility.
     const cardWidthClass = isVideo ? 'w-[280px]' : 'w-[320px]'; 
     const aspectRatioClass = isVideo ? 'aspect-[9/16]' : 'aspect-square';
     const objectPosClass = !isVideo ? 'object-top' : 'object-center';
@@ -159,7 +166,7 @@ export default function Portfolio() {
     return (
       <Component
         {...props}
-        className={`block group relative rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 flex flex-col ${cardWidthClass} flex-shrink-0 ${isLink ? 'cursor-pointer' : 'cursor-default'}`}
+        className={`block group relative rounded-xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-sm hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-1 flex flex-col ${cardWidthClass} flex-shrink-0 ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
       >
         <div className={`${aspectRatioClass} w-full overflow-hidden relative bg-gray-900`}>
           <ProjectImage 
@@ -174,7 +181,7 @@ export default function Portfolio() {
               </div>
             ) : (
               <div className="p-3 bg-white text-black rounded-full hover:scale-110 transition-transform">
-                <Eye size={24} />
+                <Maximize2 size={24} />
               </div>
             )}
           </div>
@@ -256,7 +263,7 @@ export default function Portfolio() {
           onClick={() => setSelectedVideo(null)}
         >
           <div 
-            className={`relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 w-full ${selectedVideo.isShort ? 'max-w-md aspect-[9/16] max-h-[85vh]' : 'max-w-5xl aspect-video'}`}
+            className={`relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 w-full ${selectedVideo.isShort ? 'max-w-[90vw] aspect-[9/16] max-h-[85vh]' : 'max-w-5xl aspect-video'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <button 
@@ -283,6 +290,29 @@ export default function Portfolio() {
                 autoPlay
               />
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Image Modal (Lightbox) */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg animate-in fade-in duration-200 cursor-zoom-out"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-screen p-2" onClick={(e) => e.stopPropagation()}>
+            <button 
+              className="absolute -top-12 right-0 z-20 p-2 text-white/70 hover:text-white transition-colors"
+              onClick={() => setSelectedImage(null)}
+              aria-label="Close modal"
+            >
+              <X size={32} />
+            </button>
+            <img 
+              src={selectedImage} 
+              alt="Full screen view" 
+              className="max-h-[90vh] max-w-full w-auto object-contain rounded-lg shadow-2xl"
+            />
           </div>
         </div>
       )}

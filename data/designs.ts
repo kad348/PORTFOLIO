@@ -28,7 +28,7 @@ export const designProjects: Project[] = [
     id: 8,
     title: 'Lewis Hamilton Poster',
     category: 'graphic',
-    image: 'https://raw.githubusercontent.com/kad348/Work/blob/main/f1.png',
+    image: 'https://raw.githubusercontent.com/kad348/Work/main/f1.png',
     description: 'F1 Poster for Reasons Podcast.',
   },
 ];

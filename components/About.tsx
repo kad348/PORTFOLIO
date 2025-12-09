@@ -7,10 +7,10 @@ const skills = [
 
 export default function About() {
   return (
-    <section id="about" className="py-24 px-4 sm:px-6 relative z-10">
+    <section id="about" className="py-16 md:py-24 px-4 sm:px-6 relative z-10">
       <div className="container mx-auto">
         <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-12 lg:p-16">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             <div>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">Behind the Scenes</h2>
               <div className="space-y-4 text-gray-300 leading-relaxed text-base lg:text-lg">

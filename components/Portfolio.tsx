@@ -67,7 +67,8 @@ export default function Portfolio() {
       } 
       else if (project.link.endsWith('.mp4') || project.link.endsWith('.webm') || project.link.startsWith('/videos/')) {
         e.preventDefault();
-        const isShort = project.link.toLowerCase().includes('short') || project.link.toLowerCase().includes('vertical');
+        const lowerLink = project.link.toLowerCase();
+        const isShort = lowerLink.includes('short') || lowerLink.includes('vertical') || lowerLink.includes('tiktok');
         setSelectedVideo({ src: project.link, type: 'local', isShort });
       }
     } 
@@ -159,8 +160,8 @@ export default function Portfolio() {
 
     const isVideo = project.category === 'video';
     
-    // REDUCED Video Width from 280px to 240px
-    const cardWidthClass = isVideo ? 'w-[240px]' : 'w-[320px]'; 
+    // RESPONSIVE Video Width: smaller on mobile, larger on desktop
+    const cardWidthClass = isVideo ? 'w-[200px] sm:w-[240px]' : 'w-[260px] sm:w-[320px]'; 
     const aspectRatioClass = isVideo ? 'aspect-[9/16]' : 'aspect-square';
     const objectPosClass = !isVideo ? 'object-top' : 'object-center';
 
@@ -188,17 +189,17 @@ export default function Portfolio() {
           </div>
         </div>
         
-        <div className="p-6 flex flex-col flex-grow">
+        <div className="p-4 sm:p-6 flex flex-col flex-grow">
           <div className="flex justify-between items-start mb-2">
-            <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">
+            <span className="text-[10px] sm:text-xs font-semibold text-purple-400 uppercase tracking-wider">
               {project.category}
             </span>
-            {project.link && <ExternalLink size={16} className="text-gray-500 hover:text-white" />}
+            {project.link && <ExternalLink size={14} className="text-gray-500 hover:text-white" />}
           </div>
-          <h3 className="text-xl font-bold mb-2 group-hover:text-purple-300 transition-colors line-clamp-1">
+          <h3 className="text-lg sm:text-xl font-bold mb-2 group-hover:text-purple-300 transition-colors line-clamp-1">
             {project.title}
           </h3>
-          <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">
+          <p className="text-gray-400 text-xs sm:text-sm leading-relaxed line-clamp-2">
             {project.description}
           </p>
         </div>
@@ -207,7 +208,7 @@ export default function Portfolio() {
   };
 
   return (
-    <section id="portfolio" className="py-24 relative z-10 overflow-hidden">
+    <section id="portfolio" className="py-16 md:py-24 relative z-10 overflow-hidden">
       <div className="container mx-auto px-6 mb-12">
         <div className="flex flex-col md:flex-row justify-between items-end gap-6">
           <div>
@@ -215,12 +216,12 @@ export default function Portfolio() {
             <p className="text-gray-400">A curation of my best edits and designs.</p>
           </div>
           
-          <div className="flex bg-white/5 backdrop-blur-md p-1 rounded-full border border-white/10">
+          <div className="flex bg-white/5 backdrop-blur-md p-1 rounded-full border border-white/10 overflow-x-auto max-w-full">
             {(['all', 'video', 'graphic'] as ProjectCategory[]).map((cat) => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
                   filter === cat
                     ? 'bg-purple-500 text-white shadow-lg shadow-purple-500/25'
                     : 'text-gray-400 hover:text-white'
@@ -264,7 +265,7 @@ export default function Portfolio() {
           onClick={() => setSelectedVideo(null)}
         >
           <div 
-            className={`relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 w-full ${selectedVideo.isShort ? 'max-w-[90vw] aspect-[9/16] max-h-[85vh]' : 'max-w-5xl aspect-video'}`}
+            className={`relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10 w-full ${selectedVideo.isShort ? 'max-w-[90vw] aspect-[9/16] max-h-[85vh]' : 'max-w-5xl aspect-video max-h-[80vh] md:max-h-full'}`}
             onClick={(e) => e.stopPropagation()}
           >
             <button 
@@ -277,7 +278,7 @@ export default function Portfolio() {
             
             {selectedVideo.type === 'youtube' ? (
               <iframe
-                src={`https://www.youtube.com/embed/${selectedVideo.src}?autoplay=1&rel=0&modestbranding=1`}
+                src={`https://www.youtube.com/embed/${selectedVideo.src}?rel=0&modestbranding=1`}
                 title="YouTube video player"
                 className="w-full h-full"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -285,10 +286,12 @@ export default function Portfolio() {
               ></iframe>
             ) : (
               <video 
+                key={selectedVideo.src}
                 src={selectedVideo.src} 
                 className="w-full h-full object-contain bg-black"
                 controls
-                autoPlay
+                playsInline
+                loop
               />
             )}
           </div>
@@ -301,13 +304,13 @@ export default function Portfolio() {
           className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/95 backdrop-blur-lg animate-in fade-in duration-200 cursor-zoom-out"
           onClick={() => setSelectedImage(null)}
         >
-          <div className="relative max-w-7xl max-h-screen p-2" onClick={(e) => e.stopPropagation()}>
+          <div className="relative max-w-7xl max-h-screen p-2 flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
             <button 
-              className="absolute -top-12 right-0 z-20 p-2 text-white/70 hover:text-white transition-colors"
+              className="absolute top-4 right-4 z-20 p-2 text-white bg-black/50 rounded-full backdrop-blur-md hover:bg-white/20 transition-colors"
               onClick={() => setSelectedImage(null)}
               aria-label="Close modal"
             >
-              <X size={32} />
+              <X size={24} />
             </button>
             <img 
               src={selectedImage} 

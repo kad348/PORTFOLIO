@@ -32,6 +32,6 @@ export const videoProjects: Project[] = [
     // Using a placeholder that fits the podcast theme
     image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&q=80&w=600',
     description: 'Engaging short-form content edit for Reasons Podcast.',
-    link: 'https://www.tiktok.com/@reasonspodcast/video/7513471933061631250'
+    link: 'https://cdn.jsdelivr.net/gh/kad348/Work@main/Tiktok.webm'
   }
 ];

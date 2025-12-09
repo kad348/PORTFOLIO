@@ -20,6 +20,15 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isOpen]);
+
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsOpen(false);
@@ -42,11 +51,11 @@ export default function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-black/50 backdrop-blur-md py-4' : 'bg-transparent py-6'
+        isScrolled ? 'bg-black/80 backdrop-blur-md py-4 shadow-lg shadow-purple-900/10' : 'bg-transparent py-6'
       }`}
     >
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#" onClick={(e) => scrollToSection(e, '#')} className="text-xl md:text-2xl font-bold tracking-tighter text-white font-display uppercase">
+        <a href="#" onClick={(e) => scrollToSection(e, '#')} className="text-xl md:text-2xl font-bold tracking-tighter text-white font-display uppercase z-50 relative">
           Kaveen <span className="text-purple-400">Adithya</span>
         </a>
 
@@ -66,28 +75,33 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden text-white"
+          className="md:hidden text-white z-50 relative p-2"
           onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Menu"
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
       </div>
 
-      {/* Mobile Nav */}
-      {isOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-lg border-b border-white/10 p-6 flex flex-col space-y-4 h-screen">
+      {/* Mobile Nav Overlay */}
+      <div 
+        className={`fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center transition-opacity duration-300 ${
+          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div className="flex flex-col space-y-8 text-center">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
               onClick={(e) => scrollToSection(e, item.href)}
-              className="text-lg font-medium text-gray-200 hover:text-purple-400 transition-colors"
+              className="text-3xl font-bold text-gray-200 hover:text-purple-400 transition-colors tracking-tight"
             >
               {item.label}
             </a>
           ))}
         </div>
-      )}
+      </div>
     </nav>
   );
 }

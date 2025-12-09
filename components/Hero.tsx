@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, Play } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 import LogoLoop from './LogoLoop';
 
 // Using official colored app icons to match the provided files
@@ -19,14 +19,6 @@ const softwareLogos = [
   { 
     title: 'Adobe Illustrator', 
     src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Adobe_Illustrator_CC_icon.svg/2101px-Adobe_Illustrator_CC_icon.svg.png' 
-  },
-  { 
-    title: 'DaVinci Resolve', 
-    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/DaVinci_Resolve_Studio.png/600px-DaVinci_Resolve_Studio.png' 
-  },
-  {
-    title: 'CapCut',
-    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Capcut_logo.svg/2048px-Capcut_logo.svg.png'
   }
 ];
 
@@ -49,13 +41,13 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-12">
+    <section className="relative min-h-[100dvh] flex items-center justify-center px-4 sm:px-6 pt-24 pb-12 overflow-hidden">
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           
           {/* Left Column: Text Content */}
-          <div className="text-left">
-            <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 backdrop-blur-sm">
+          <div className="text-left flex flex-col justify-center">
+            <div className="inline-block mb-6 self-start px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/10 backdrop-blur-sm">
               <span className="text-xs font-semibold tracking-wider text-purple-200 uppercase">
                 Available for freelance
               </span>
@@ -69,7 +61,7 @@ export default function Hero() {
               </span>
             </h1>
             
-            <p className="max-w-xl text-base sm:text-lg text-gray-400 mb-10 font-light leading-relaxed">
+            <p className="max-w-xl text-base sm:text-lg text-gray-400 mb-8 sm:mb-10 font-light leading-relaxed">
               Specializing in high-impact motion graphics and cinematic video editing. 
               Turning concepts into compelling visual narratives using the best tools in the industry.
             </p>
@@ -82,15 +74,6 @@ export default function Hero() {
               >
                 <span>View Recent Work</span>
                 <ArrowDown size={18} className="group-hover:translate-y-1 transition-transform" />
-              </a>
-              
-              <a
-                href="#contact"
-                onClick={(e) => scrollToSection(e, '#contact')}
-                className="px-8 py-4 rounded-full border border-white/20 hover:bg-white/10 backdrop-blur-sm text-white transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <Play size={16} className="fill-current" />
-                <span>Showreel</span>
               </a>
             </div>
           </div>

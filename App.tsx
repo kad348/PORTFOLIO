@@ -1,3 +1,4 @@
+
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { Instagram, Youtube, Phone, Mail } from 'lucide-react';
 import Galaxy from './components/Galaxy';
@@ -50,19 +51,13 @@ export default function App() {
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden bg-black text-white selection:bg-purple-500/30">
       {/* Background Layer */}
-      {/* Updated background to a gray-black gradient for mobile/fallback */}
+      {/* Background uses a gray-black gradient as base/fallback */}
       <div className="fixed inset-0 z-0 bg-gradient-to-b from-gray-900 via-black to-black">
-        {/* Only render Galaxy on desktop (non-mobile) devices */}
+        {/* Only render Galaxy on desktop (non-mobile) devices for performance */}
         {!isMobile && (
-          <Galaxy 
-            starSpeed={0.02} // Very slow, gentle drift
+          <Galaxy
+            starSpeed={0.5}
             density={1.5}
-            twinkleIntensity={0.1} // Subtle twinkling
-            rotationSpeed={0.005} // Almost imperceptible rotation
-            hueShift={280} // Purple/Blue shift
-            glowIntensity={0.5}
-            mouseRepulsion={true}
-            repulsionStrength={2} // Smooth, elegant response
           />
         )}
         {/* Gradient Overlay to ensure text readability */}
@@ -141,3 +136,4 @@ export default function App() {
     </div>
   );
 }
+    

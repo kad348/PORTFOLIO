@@ -159,7 +159,8 @@ export default function Portfolio() {
 
     const isVideo = project.category === 'video';
     
-    const cardWidthClass = isVideo ? 'w-[280px]' : 'w-[320px]'; 
+    // REDUCED Video Width from 280px to 240px
+    const cardWidthClass = isVideo ? 'w-[240px]' : 'w-[320px]'; 
     const aspectRatioClass = isVideo ? 'aspect-[9/16]' : 'aspect-square';
     const objectPosClass = !isVideo ? 'object-top' : 'object-center';
 

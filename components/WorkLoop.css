@@ -1,45 +1,59 @@
 .work-loop-container {
+  /* Responsive gap variable */
+  --loop-gap: 1.5rem;
   display: flex;
   overflow: hidden;
   user-select: none;
-  gap: 2rem;
+  gap: var(--loop-gap);
+  /* Gradient masks for smooth fade edges */
   mask-image: linear-gradient(
     to right,
     transparent,
-    black 10%,
-    black 90%,
+    black 5%,
+    black 95%,
     transparent
   );
   -webkit-mask-image: linear-gradient(
     to right,
     transparent,
-    black 10%,
-    black 90%,
+    black 5%,
+    black 95%,
     transparent
   );
+}
+
+@media (min-width: 768px) {
+  .work-loop-container {
+    --loop-gap: 2.5rem; /* Larger gap on PC */
+  }
 }
 
 .work-loop-inner {
   flex-shrink: 0;
   display: flex;
-  gap: 2rem;
+  gap: var(--loop-gap);
   min-width: 100%;
-  will-change: transform; /* Optimized for GPU */
+  /* Performance optimization: hint browser to use GPU */
+  will-change: transform; 
 }
 
 .work-loop-container:hover .work-loop-inner {
   animation-play-state: paused;
 }
 
+/* 
+   The calculation MUST include the gap variable to be perfectly seamless.
+   -100% moves the width of the content, -var(--loop-gap) moves the extra space.
+*/
 @keyframes scroll-left {
   to {
-    transform: translateX(calc(-100% - 2rem));
+    transform: translateX(calc(-100% - var(--loop-gap)));
   }
 }
 
 @keyframes scroll-right {
   from {
-    transform: translateX(calc(-100% - 2rem));
+    transform: translateX(calc(-100% - var(--loop-gap)));
   }
   to {
     transform: translateX(0);
@@ -52,4 +66,11 @@
 
 .animate-scroll-right {
   animation: scroll-right 40s linear infinite;
+}
+
+/* Reduce animation speed on mobile for better readability */
+@media (max-width: 768px) {
+  .animate-scroll-left, .animate-scroll-right {
+    animation-duration: 30s;
+  }
 }

@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { Instagram, Youtube, Phone, Mail } from 'lucide-react';
 import Galaxy from './components/Galaxy';
 import Navbar from './components/Navbar';
@@ -24,7 +24,6 @@ const DiscordIcon = ({ size = 20, className = "" }: { size?: number, className?:
   </svg>
 );
 
-// Loading placeholder component
 const SectionLoader = () => (
   <div className="w-full h-96 flex items-center justify-center">
     <div className="w-1 h-1 bg-purple-500 rounded-full animate-ping"></div>
@@ -32,20 +31,40 @@ const SectionLoader = () => (
 );
 
 export default function App() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Listen for resize
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden bg-black text-white selection:bg-purple-500/30">
       {/* Background Layer */}
-      <div className="fixed inset-0 z-0">
-        <Galaxy 
-          starSpeed={0.02} // Very slow, gentle drift
-          density={1.5}
-          twinkleIntensity={0.1} // Subtle twinkling
-          rotationSpeed={0.005} // Almost imperceptible rotation
-          hueShift={280} // Purple/Blue shift
-          glowIntensity={0.5}
-          mouseRepulsion={true}
-          repulsionStrength={2} // Smooth, elegant response
-        />
+      {/* Updated background to a gray-black gradient for mobile/fallback */}
+      <div className="fixed inset-0 z-0 bg-gradient-to-b from-gray-900 via-black to-black">
+        {/* Only render Galaxy on desktop (non-mobile) devices */}
+        {!isMobile && (
+          <Galaxy 
+            starSpeed={0.02} // Very slow, gentle drift
+            density={1.5}
+            twinkleIntensity={0.1} // Subtle twinkling
+            rotationSpeed={0.005} // Almost imperceptible rotation
+            hueShift={280} // Purple/Blue shift
+            glowIntensity={0.5}
+            mouseRepulsion={true}
+            repulsionStrength={2} // Smooth, elegant response
+          />
+        )}
         {/* Gradient Overlay to ensure text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/80 pointer-events-none" />
       </div>
@@ -73,9 +92,8 @@ export default function App() {
           </Suspense>
         </main>
         
-        <footer className="py-8 text-center text-gray-600 text-sm relative z-10 border-t border-white/5 bg-black/80 backdrop-blur-xl">
+        <footer className="py-8 text-center text-gray-600 text-sm relative z-10 border-t border-white/5 bg-black/80 backdrop-blur-xl px-4">
           <div className="flex flex-col items-center gap-6 mb-6">
-            {/* Contact Details */}
             <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 font-medium">
               <a href="tel:+94715308357" className="flex items-center gap-2 hover:text-purple-400 transition-colors">
                 <Phone size={16} />
@@ -88,7 +106,6 @@ export default function App() {
               </a>
             </div>
 
-            {/* Social Icons */}
             <div className="flex justify-center gap-6">
               <a 
                 href="#" 

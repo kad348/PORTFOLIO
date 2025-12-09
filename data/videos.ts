@@ -25,5 +25,13 @@ export const videoProjects: Project[] = [
     description: 'Advanced compositing and smooth motion tracking effects.',
     link: 'https://youtube.com/shorts/1jW-mKjmmWQ?si=SdoLM-X-gGY1lHkA'
   },
-
+  {
+    id: 4,
+    title: 'Reasons Podcast Clip',
+    category: 'video',
+    // Using a placeholder that fits the podcast theme
+    image: 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&q=80&w=600',
+    description: 'Engaging short-form content edit for Reasons Podcast.',
+    link: 'https://www.tiktok.com/@reasonspodcast/video/7513471933061631250'
+  }
 ];

@@ -23,6 +23,10 @@ const softwareLogos = [
   { 
     title: 'DaVinci Resolve', 
     src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/DaVinci_Resolve_Studio.png/600px-DaVinci_Resolve_Studio.png' 
+  },
+  {
+    title: 'CapCut',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Capcut_logo.svg/2048px-Capcut_logo.svg.png'
   }
 ];
 
@@ -45,7 +49,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 pt-20">
+    <section className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-12">
       <div className="container mx-auto max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           
@@ -57,14 +61,15 @@ export default function Hero() {
               </span>
             </div>
             
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-6 leading-none">
+            {/* Optimized Responsive Typography */}
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-6 leading-[1.1] sm:leading-tight">
               Visual <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
                 Alchemist
               </span>
             </h1>
             
-            <p className="max-w-xl text-lg text-gray-400 mb-12 font-light leading-relaxed">
+            <p className="max-w-xl text-base sm:text-lg text-gray-400 mb-10 font-light leading-relaxed">
               Specializing in high-impact motion graphics and cinematic video editing. 
               Turning concepts into compelling visual narratives using the best tools in the industry.
             </p>
@@ -91,8 +96,8 @@ export default function Hero() {
           </div>
 
           {/* Right Column: Software Arsenal (Logo Loop) */}
-          <div className="w-full relative">
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 lg:p-12 shadow-2xl shadow-purple-500/5">
+          <div className="w-full relative mt-8 lg:mt-0">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl shadow-purple-500/5">
               <div className="text-center mb-8">
                 <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Software Arsenal</h3>
                 <div className="h-1 w-12 bg-purple-500/50 mx-auto rounded-full"></div>
@@ -108,7 +113,7 @@ export default function Hero() {
                   speed={40} 
                   direction="left" 
                   gap={40} 
-                  logoHeight={48} // Slightly larger for app icons
+                  logoHeight={48} 
                   pauseOnHover={true}
                   scaleOnHover={true}
                   fadeOut={true}

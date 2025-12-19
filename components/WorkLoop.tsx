@@ -1,5 +1,4 @@
-
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useState, useCallback, memo } from 'react';
 
 interface WorkLoopProps {
   children?: React.ReactNode;
@@ -7,8 +6,7 @@ interface WorkLoopProps {
   speed?: number; // Pixels per second
 }
 
-export default function WorkLoop({ children, direction = 'left', speed = 40 }: WorkLoopProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+const WorkLoop = ({ children, direction = 'left', speed = 40 }: WorkLoopProps) => {
   const trackRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   
@@ -17,18 +15,17 @@ export default function WorkLoop({ children, direction = 'left', speed = 40 }: W
   const [startOffset, setStartOffset] = useState(0);
   
   const offsetRef = useRef(0);
-  const requestRef = useRef<number>(null);
+  const requestRef = useRef<number | null>(null);
   const lastTimestampRef = useRef<number | null>(null);
   const contentWidthRef = useRef(0);
 
-  // Sync the DOM transform with our internal offset
   const updateTransform = useCallback(() => {
     if (trackRef.current) {
+      // Use translate3d for GPU acceleration
       trackRef.current.style.transform = `translate3d(${-offsetRef.current}px, 0, 0)`;
     }
   }, []);
 
-  // Calculate dimensions and handle resizing
   useEffect(() => {
     const updateWidth = () => {
       if (contentRef.current) {
@@ -55,8 +52,6 @@ export default function WorkLoop({ children, direction = 'left', speed = 40 }: W
       const moveAmount = (direction === 'left' ? speed : -speed) * deltaTime;
       offsetRef.current += moveAmount;
 
-      // Infinite Loop Logic
-      // If we go past the end of the first set of content, wrap around
       if (offsetRef.current >= contentWidthRef.current) {
         offsetRef.current -= contentWidthRef.current;
       } else if (offsetRef.current < 0) {
@@ -72,11 +67,10 @@ export default function WorkLoop({ children, direction = 'left', speed = 40 }: W
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
     return () => {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
     };
   }, [animate]);
 
-  // Dragging Logic
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setStartX(e.pageX);
@@ -94,10 +88,9 @@ export default function WorkLoop({ children, direction = 'left', speed = 40 }: W
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDragging) return;
     const x = e.pageX;
-    const walk = (startX - x) * 1.2; // Drag sensitivity
+    const walk = (startX - x) * 1.5; 
     offsetRef.current = startOffset + walk;
     
-    // Maintain wrap-around during dragging
     if (contentWidthRef.current > 0) {
       if (offsetRef.current >= contentWidthRef.current) {
         offsetRef.current -= contentWidthRef.current;
@@ -115,7 +108,7 @@ export default function WorkLoop({ children, direction = 'left', speed = 40 }: W
   const handleTouchMove = (e: React.TouchEvent) => {
     if (!isDragging) return;
     const x = e.touches[0].pageX;
-    const walk = (startX - x) * 1.2;
+    const walk = (startX - x) * 1.5;
     offsetRef.current = startOffset + walk;
     
     if (contentWidthRef.current > 0) {
@@ -139,8 +132,7 @@ export default function WorkLoop({ children, direction = 'left', speed = 40 }: W
 
   return (
     <div 
-      ref={containerRef}
-      className="relative w-full overflow-hidden select-none cursor-grab active:cursor-grabbing"
+      className="relative w-full overflow-hidden select-none cursor-grab active:cursor-grabbing group"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={stopDragging}
@@ -151,26 +143,25 @@ export default function WorkLoop({ children, direction = 'left', speed = 40 }: W
     >
       <div
         ref={trackRef}
-        className="flex whitespace-nowrap py-4 w-max"
+        className="flex whitespace-nowrap py-4 w-max transition-opacity duration-500"
         style={{ willChange: 'transform' }}
       >
-        {/* First set of content */}
         <div ref={contentRef} className="flex gap-6 md:gap-10 px-4">
           {children}
         </div>
-        {/* Seamless Duplicate */}
         <div className="flex gap-6 md:gap-10 px-4" aria-hidden="true">
           {children}
         </div>
-        {/* Third set to ensure no gaps on extremely wide screens during wrap */}
         <div className="flex gap-6 md:gap-10 px-4" aria-hidden="true">
           {children}
         </div>
       </div>
       
-      {/* Edge Fades */}
-      <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-black via-black/40 to-transparent z-10 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-black via-black/40 to-transparent z-10 pointer-events-none" />
+      {/* Dynamic Edge Fades */}
+      <div className="absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-black via-black/40 to-transparent z-10 pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-black via-black/40 to-transparent z-10 pointer-events-none" />
     </div>
   );
 }
+
+export default memo(WorkLoop);

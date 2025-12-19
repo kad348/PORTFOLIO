@@ -1,15 +1,12 @@
-
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Instagram, Youtube, Phone, Mail } from 'lucide-react';
-import Galaxy from './components/Galaxy';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-
-// Lazy load heavy sections to improve initial page load speed
-const Portfolio = lazy(() => import('./components/Portfolio'));
-const Testimonials = lazy(() => import('./components/Testimonials'));
-const About = lazy(() => import('./components/About'));
-const Contact = lazy(() => import('./components/Contact'));
+import Galaxy from './components/Galaxy.tsx';
+import Navbar from './components/Navbar.tsx';
+import Hero from './components/Hero.tsx';
+import Portfolio from './components/Portfolio.tsx';
+import Testimonials from './components/Testimonials.tsx';
+import About from './components/About.tsx';
+import Contact from './components/Contact.tsx';
 
 // Custom Discord Icon Component
 const DiscordIcon = ({ size = 20, className = "" }: { size?: number, className?: string }) => (
@@ -25,12 +22,6 @@ const DiscordIcon = ({ size = 20, className = "" }: { size?: number, className?:
   </svg>
 );
 
-const SectionLoader = () => (
-  <div className="w-full h-96 flex items-center justify-center">
-    <div className="w-1 h-1 bg-purple-500 rounded-full animate-ping"></div>
-  </div>
-);
-
 export default function App() {
   const [isMobile, setIsMobile] = useState(false);
 
@@ -39,28 +30,21 @@ export default function App() {
       setIsMobile(window.innerWidth < 768);
     };
     
-    // Initial check
     checkMobile();
-    
-    // Listen for resize
     window.addEventListener('resize', checkMobile);
-    
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   return (
     <div className="relative w-full min-h-screen overflow-x-hidden bg-black text-white selection:bg-purple-500/30">
       {/* Background Layer */}
-      {/* Background uses a gray-black gradient as base/fallback */}
       <div className="fixed inset-0 z-0 bg-gradient-to-b from-gray-900 via-black to-black">
-        {/* Only render Galaxy on desktop (non-mobile) devices for performance */}
         {!isMobile && (
           <Galaxy
             starSpeed={0.5}
             density={1.5}
           />
         )}
-        {/* Gradient Overlay to ensure text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-black/80 pointer-events-none" />
       </div>
 
@@ -69,22 +53,10 @@ export default function App() {
         <Navbar />
         <main>
           <Hero />
-          
-          <Suspense fallback={<SectionLoader />}>
-            <Portfolio />
-          </Suspense>
-          
-          <Suspense fallback={<SectionLoader />}>
-            <Testimonials />
-          </Suspense>
-          
-          <Suspense fallback={<SectionLoader />}>
-            <About />
-          </Suspense>
-          
-          <Suspense fallback={<SectionLoader />}>
-            <Contact />
-          </Suspense>
+          <Portfolio />
+          <Testimonials />
+          <About />
+          <Contact />
         </main>
         
         <footer className="py-8 text-center text-gray-600 text-sm relative z-10 border-t border-white/5 bg-black/80 backdrop-blur-xl px-4">
@@ -136,4 +108,3 @@ export default function App() {
     </div>
   );
 }
-    

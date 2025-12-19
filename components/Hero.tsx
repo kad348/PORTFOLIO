@@ -1,8 +1,7 @@
 import React from 'react';
 import { ArrowDown } from 'lucide-react';
-import LogoLoop from './LogoLoop';
+import LogoLoop from './LogoLoop.tsx';
 
-// Using official colored app icons to match the provided files
 const softwareLogos = [
   { 
     title: 'Adobe Premiere Pro', 
@@ -53,61 +52,56 @@ export default function Hero() {
               </span>
             </div>
             
-            {/* Optimized Responsive Typography */}
-            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-6 leading-[1.1] sm:leading-tight">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold tracking-tighter text-white mb-6 leading-[0.95] sm:leading-[0.9]">
               Visual <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-purple-300 to-cyan-400">
                 Alchemist
               </span>
             </h1>
             
-            <p className="max-w-xl text-base sm:text-lg text-gray-400 mb-8 sm:mb-10 font-light leading-relaxed">
-              Specializing in high-impact motion graphics and cinematic video editing. 
-              Turning concepts into compelling visual narratives using the best tools in the industry.
+            <p className="max-w-xl text-lg sm:text-xl text-gray-400 mb-10 font-light leading-relaxed">
+              Transforming concepts into cinematic realities. Specialized in high-impact motion graphics and expert video editing for global brands.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="#portfolio"
                 onClick={(e) => scrollToSection(e, '#portfolio')}
-                className="group relative px-8 py-4 bg-white text-black font-bold rounded-full overflow-hidden flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors cursor-pointer"
+                className="group relative px-10 py-5 bg-white text-black font-bold rounded-full overflow-hidden flex items-center justify-center gap-3 hover:bg-purple-500 hover:text-white transition-all duration-300 transform active:scale-95 shadow-xl shadow-purple-500/10"
               >
-                <span>View Recent Work</span>
-                <ArrowDown size={18} className="group-hover:translate-y-1 transition-transform" />
+                <span className="relative z-10">Explore Works</span>
+                <ArrowDown size={18} className="relative z-10 group-hover:translate-y-1 transition-transform" />
               </a>
             </div>
           </div>
 
           {/* Right Column: Software Arsenal (Logo Loop) */}
           <div className="w-full relative mt-8 lg:mt-0">
-            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-12 shadow-2xl shadow-purple-500/5">
-              <div className="text-center mb-8">
-                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-2">Software Arsenal</h3>
-                <div className="h-1 w-12 bg-purple-500/50 mx-auto rounded-full"></div>
+            <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] p-8 sm:p-10 lg:p-14 shadow-2xl shadow-black/50 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              
+              <div className="text-center mb-10 relative z-10">
+                <h3 className="text-xs font-black text-gray-400 uppercase tracking-[0.4em] mb-3">Software Arsenal</h3>
+                <div className="h-1 w-12 bg-gradient-to-r from-purple-500 to-cyan-400 mx-auto rounded-full"></div>
               </div>
               
-              <div className="relative">
-                {/* Gradient Masks for edges */}
-                <div className="absolute left-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-r from-black/20 to-transparent"></div>
-                <div className="absolute right-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-l from-black/20 to-transparent"></div>
-                
+              <div className="relative z-10">
                 <LogoLoop 
                   logos={softwareLogos} 
-                  speed={40} 
+                  speed={35} 
                   direction="left" 
-                  gap={40} 
-                  logoHeight={48} 
+                  gap={50} 
+                  logoHeight={52} 
                   pauseOnHover={true}
                   scaleOnHover={true}
                   fadeOut={true}
-                  fadeOutColor="transparent"
                 />
               </div>
 
-              <div className="mt-8 flex justify-center space-x-2">
-                {[...Array(3)].map((_, i) => (
-                  <div key={i} className={`h-1.5 rounded-full ${i === 0 ? 'w-8 bg-purple-500' : 'w-2 bg-white/10'}`}></div>
-                ))}
+              <div className="mt-10 flex justify-center space-x-2 relative z-10">
+                <div className="w-10 h-1.5 bg-purple-500 rounded-full"></div>
+                <div className="w-2 h-1.5 bg-white/10 rounded-full"></div>
+                <div className="w-2 h-1.5 bg-white/10 rounded-full"></div>
               </div>
             </div>
           </div>

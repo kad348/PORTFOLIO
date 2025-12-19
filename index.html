@@ -4,9 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Kaveen Adithya - Professional Video Editor and Graphic Designer specializing in high-impact motion graphics and cinematic visual storytelling.">
-    <title>Kaveen Adithya | Visual Alchemist</title>
     
+    <!-- Primary Meta Tags -->
+    <title>Kaveen Adithya | Visual Alchemist - Editor & Designer</title>
+    <meta name="title" content="Kaveen Adithya | Visual Alchemist" />
+    <meta name="description" content="Professional Video Editor and Graphic Designer specializing in high-impact motion graphics and cinematic visual storytelling." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://kaveen-portfolio.vercel.app/" />
+    <meta property="og:title" content="Kaveen Adithya | Visual Alchemist" />
+    <meta property="og:description" content="Cinematic video editing and premium graphic design portfolio." />
+    <meta property="og:image" content="https://raw.githubusercontent.com/kad348/Work/main/f1.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Kaveen Adithya | Visual Alchemist" />
+    <meta property="twitter:description" content="Cinematic video editing and premium graphic design portfolio." />
+
     <!-- Preconnect to CDNs for faster asset loading -->
     <link rel="preconnect" href="https://cdn.discordapp.com" crossorigin>
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
@@ -15,30 +30,57 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --accent: #a855f7;
+      }
       body {
         font-family: 'Inter', sans-serif;
-        background-color: #050505;
+        background-color: #000000;
         color: #ffffff;
-        overflow-x: hidden; /* Prevent horizontal scrollbar during animations */
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       h1, h2, h3, h4, h5, h6 {
         font-family: 'Space Grotesk', sans-serif;
       }
       /* Custom scrollbar */
       ::-webkit-scrollbar {
-        width: 8px;
+        width: 6px;
       }
       ::-webkit-scrollbar-track {
         background: #000; 
       }
       ::-webkit-scrollbar-thumb {
-        background: #333; 
-        border-radius: 4px;
+        background: #222; 
+        border-radius: 10px;
+        transition: background 0.3s;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #555; 
+        background: var(--accent); 
+      }
+      
+      /* Selection styling */
+      ::selection {
+        background: rgba(168, 85, 247, 0.4);
+        color: white;
+      }
+
+      /* Global focus ring */
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 4px;
+      }
+
+      /* Smooth content transitions */
+      .fade-in {
+        animation: fadeIn 0.8s ease-out forwards;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
     </style>
   <script type="importmap">

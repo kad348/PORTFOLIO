@@ -1,13 +1,10 @@
 import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 
-// Shader code provided by user
 const vertexShader = `
 attribute vec2 uv;
 attribute vec2 position;
-
 varying vec2 vUv;
-
 void main() {
   vUv = uv;
   gl_Position = vec4(position, 0, 1);
@@ -16,7 +13,6 @@ void main() {
 
 const fragmentShader = `
 precision highp float;
-
 uniform float uTime;
 uniform vec3 uResolution;
 uniform vec2 uFocal;
@@ -35,7 +31,6 @@ uniform float uRepulsionStrength;
 uniform float uMouseActiveFactor;
 uniform float uAutoCenterRepulsion;
 uniform bool uTransparent;
-
 varying vec2 vUv;
 
 #define NUM_LAYER 4.0
@@ -83,7 +78,6 @@ float Star(vec2 uv, float flare) {
 
 vec3 StarLayer(vec2 uv) {
   vec3 col = vec3(0.0);
-
   vec2 gv = fract(uv) - 0.5; 
   vec2 id = floor(uv);
 
@@ -108,25 +102,20 @@ vec3 StarLayer(vec2 uv) {
       base = hsv2rgb(vec3(hue, sat, val));
 
       vec2 pad = vec2(tris(seed * 34.0 + uTime * uSpeed / 10.0), tris(seed * 38.0 + uTime * uSpeed / 30.0)) - 0.5;
-
       float star = Star(gv - offset - pad, flareSize);
       vec3 color = base;
-
       float twinkle = trisn(uTime * uSpeed + seed * 6.2831) * 0.5 + 1.0;
       twinkle = mix(1.0, twinkle, uTwinkleIntensity);
       star *= twinkle;
-      
       col += star * size * color;
     }
   }
-
   return col;
 }
 
 void main() {
   vec2 focalPx = uFocal * uResolution.xy;
   vec2 uv = (vUv * uResolution.xy - focalPx) / uResolution.y;
-
   vec2 mouseNorm = uMouse - vec2(0.5);
   
   if (uAutoCenterRepulsion > 0.0) {
@@ -147,11 +136,9 @@ void main() {
   float autoRotAngle = uTime * uRotationSpeed;
   mat2 autoRot = mat2(cos(autoRotAngle), -sin(autoRotAngle), sin(autoRotAngle), cos(autoRotAngle));
   uv = autoRot * uv;
-
   uv = mat2(uRotation.x, -uRotation.y, uRotation.y, uRotation.x) * uv;
 
   vec3 col = vec3(0.0);
-
   for (float i = 0.0; i < 1.0; i += 1.0 / NUM_LAYER) {
     float depth = fract(i + uStarSpeed * uSpeed);
     float scale = mix(20.0 * uDensity, 0.5 * uDensity, depth);
@@ -191,7 +178,7 @@ interface GalaxyProps {
   [key: string]: any;
 }
 
-export default function Galaxy({
+const Galaxy = ({
   focal = [0.5, 0.5],
   rotation = [1.0, 0.0],
   starSpeed = 0.5,
@@ -210,7 +197,7 @@ export default function Galaxy({
   transparent = true,
   className = "",
   ...rest
-}: GalaxyProps) {
+}: GalaxyProps) => {
   const ctnDom = useRef<HTMLDivElement>(null);
   const targetMousePos = useRef({ x: 0.5, y: 0.5 });
   const smoothMousePos = useRef({ x: 0.5, y: 0.5 });
@@ -221,25 +208,29 @@ export default function Galaxy({
   useEffect(() => {
     if (!ctnDom.current) return;
     const ctn = ctnDom.current;
+    
+    // PERFORMANCE: Cap DPR at 2.0 to avoid huge resolution costs on 4K/Retina
+    const dpr = Math.min(window.devicePixelRatio, 2.0);
+    
     const renderer = new Renderer({
       alpha: transparent,
-      premultipliedAlpha: false
+      premultipliedAlpha: false,
+      antialias: true,
+      dpr
     });
+    
     const gl = renderer.gl;
 
     if (transparent) {
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-      gl.clearColor(0, 0, 0, 0);
-    } else {
-      gl.clearColor(0, 0, 0, 1);
     }
 
     let program: Program;
 
     function resize() {
-      const scale = 1;
-      renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale);
+      if (!ctnDom.current) return;
+      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
       if (program) {
         program.uniforms.uResolution.value = new Color(
           gl.canvas.width,
@@ -283,22 +274,20 @@ export default function Galaxy({
 
     const mesh = new Mesh(gl, { geometry, program });
 
-    // Optimization: Pause animation if page is hidden
     let isVisible = true;
     const handleVisibilityChange = () => {
       isVisible = !document.hidden;
-      if (isVisible) {
-        // Restart loop
+      if (isVisible && !rafRef.current) {
         rafRef.current = requestAnimationFrame(update);
-      } else {
-        // Cancel loop
-        if (rafRef.current) cancelAnimationFrame(rafRef.current);
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     function update(t: number) {
-      if (!isVisible) return;
+      if (!isVisible) {
+        rafRef.current = null;
+        return;
+      }
       
       rafRef.current = requestAnimationFrame(update);
       
@@ -310,7 +299,6 @@ export default function Galaxy({
       const lerpFactor = 0.05;
       smoothMousePos.current.x += (targetMousePos.current.x - smoothMousePos.current.x) * lerpFactor;
       smoothMousePos.current.y += (targetMousePos.current.y - smoothMousePos.current.y) * lerpFactor;
-
       smoothMouseActive.current += (targetMouseActive.current - smoothMouseActive.current) * lerpFactor;
 
       program.uniforms.uMouse.value[0] = smoothMousePos.current.x;
@@ -320,7 +308,6 @@ export default function Galaxy({
       renderer.render({ scene: mesh });
     }
     
-    // Start loop
     rafRef.current = requestAnimationFrame(update);
     ctn.appendChild(gl.canvas);
 
@@ -337,7 +324,6 @@ export default function Galaxy({
     }
 
     if (mouseInteraction) {
-      // Use window/document listeners to catch events even when content is overlaying the background
       window.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseleave', handleMouseLeave);
     }
@@ -351,28 +337,21 @@ export default function Galaxy({
         window.removeEventListener('mousemove', handleMouseMove);
         document.removeEventListener('mouseleave', handleMouseLeave);
       }
-      ctn.removeChild(gl.canvas);
+      
+      if (ctn && gl.canvas.parentNode === ctn) {
+        ctn.removeChild(gl.canvas);
+      }
+      
       const ext = gl.getExtension('WEBGL_lose_context');
       if (ext) ext.loseContext();
     };
   }, [
-    focal,
-    rotation,
-    starSpeed,
-    density,
-    hueShift,
-    disableAnimation,
-    speed,
-    mouseInteraction,
-    glowIntensity,
-    saturation,
-    mouseRepulsion,
-    twinkleIntensity,
-    rotationSpeed,
-    repulsionStrength,
-    autoCenterRepulsion,
-    transparent
+    focal, rotation, starSpeed, density, hueShift, disableAnimation,
+    speed, mouseInteraction, glowIntensity, saturation, mouseRepulsion,
+    twinkleIntensity, rotationSpeed, repulsionStrength, autoCenterRepulsion, transparent
   ]);
 
   return <div ref={ctnDom} className={`galaxy-container w-full h-full ${className}`} {...rest} />;
 }
+
+export default memo(Galaxy);
